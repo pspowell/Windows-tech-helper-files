@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>IMAGE&lowbar;BACKUP&period;BAT</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="image_backupbat">IMAGE_BACKUP.BAT</h1>
+<p>This batch file is meant to easily create a system image of the boot drive and all other essential partitions and data needed to successfully boot the computer.</p>
+<p><strong>NOTE</strong>
+This utility only backs up the partitions needed to boot the system.  In most situations, that is everything, but if the boot disk has been split or extra storage has been added (Drive D: for example), that drive will not be backed up.</p>
+<h2 id="usage">USAGE</h2>
+<ol>
+<li>Plug in your backup media</li>
+<li>Copy the image backup.bat file to the backup media drive</li>
+<li>Open a command prompt as administrator on the backup media drive and execute the script image_backup.bat.</li>
+</ol>
+<pre><code>   D:\&gt;image_backup.bat
+wbadmin 1.0 - Backup command-line tool
+(C) Copyright Microsoft Corporation. All rights reserved.
+
+Retrieving volume information...
+This will back up SYSTEM(EFI System Partition) (100.00 MB),Windows(C:) to D:.
+The backup operation to D: is starting.
+Creating a shadow copy of the volumes specified for backup...
+Creating a shadow copy of the volumes specified for backup...
+Creating a backup of volume SYSTEM(EFI System Partition) (100.00 MB), copied (0%).
+Creating a backup of volume SYSTEM(EFI System Partition) (100.00 MB), copied (100%).
+The backup of volume SYSTEM(EFI System Partition) (100.00 MB) completed successfully.
+Creating a backup of volume Windows(C:), copied (0%).
+Creating a backup of volume Windows(C:), copied (5%).
+Creating a backup of volume Windows(C:), copied (10%).
+.
+.
+.
+Creating a backup of volume Windows(C:), copied (100%).
+The backup of volume Windows(C:) completed successfully.
+Summary of the backup operation:
+------------------
+
+The backup operation successfully completed.
+The backup of volume SYSTEM(EFI System Partition) (100.00 MB) completed successfully.
+The backup of volume Windows(C:) completed successfully.
+Log of files successfully backed up:
+C:\Windows\Logs\WindowsBackup\Backup-05-04-2023_16-20-11.log
+
+A subdirectory or file D:\windowsimagebackup\FarmPC\Drivers already exists.
+
+Deployment Image Servicing and Management tool
+Version: 10.0.19041.844
+
+Image Version: 10.0.19045.2604
+
+Exporting 1 of 8 - oem0.inf: The driver package successfully exported.
+Exporting 2 of 8 - oem1.inf: The driver package successfully exported.
+Exporting 3 of 8 - oem2.inf: The driver package successfully exported.
+Exporting 4 of 8 - oem3.inf: The driver package successfully exported.
+Exporting 5 of 8 - oem4.inf: The driver package successfully exported.
+Exporting 6 of 8 - oem5.inf: The driver package successfully exported.
+Exporting 7 of 8 - oem6.inf: The driver package successfully exported.
+Exporting 8 of 8 - oem7.inf: The driver package successfully exported.
+The operation completed successfully.
+
+D:\&gt;
+</code></pre>
+<h2 id="what-it-does">WHAT IT DOES</h2>
+<p>In these examples, the backup drive is D: and the computername is LENOVO</p>
+<h3 id="executes-wbadmin"><strong>Executes WBADMIN</strong></h3>
+<p>Executes the WBADMIN utility to back up just drive C and essential boot partitions.  A directory <em>WindowsImageBackup\your_computername</em> is created on the backup drive
+<code>wbadmin start backup -backupTarget:D: -include:C: -allCritical -quiet&quot;</code></p>
+<h4 id="resets-permissions-on-windowsimagebackup"><strong>Resets permissions on WINDOWSIMAGEBACKUP</strong></h4>
+<p>Since WBADMIN creates a directory on the backup drive which is protected, this script executes a few commands to unprotect the backup so it can be more easily viewed.<br>
+<code>takeown /F D:\windowsimagebackup /a /r /d y &gt; nul </code><br>
+<code>icacls D:\windowsimagebackup /reset /T &gt; nul</code></p>
+<h4 id="exports-special-drivers-to-the-backup-directory"><strong>Exports special drivers to the backup directory</strong></h4>
+<p>All special drivers not typically shipped with Windows are exported to <em>WindowsImageBackup\your_computername\Drivers</em><br>
+<code>dism /online /export-driver /destination:D:\windowsimagebackup\LENOVO\Drivers</code></p>
+<h4 id="if-it-exists-the-product-key-is-exported-as-well"><strong>If it exists, the product key is exported as well</strong></h4>
+<p><code>wmic path softwarelicensingservice get OA3xOriginalProductKey&gt;D:\windowsimagebackup\LENOVO\ProductKey.txt</code></p>
+
+        
+        
+    </body>
+    </html>
