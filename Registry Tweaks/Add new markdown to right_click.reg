@@ -7,4 +7,4 @@ Windows Registry Editor Version 5.00
 "NullFile"=""
 
 [HKEY_CLASSES_ROOT\markdown]
-@="README"
+@="README.md"
