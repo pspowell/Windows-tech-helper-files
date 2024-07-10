@@ -15,7 +15,7 @@ h:
 $hst=hostname
 $filePath = "H:\backup.bat"
 $stream = [System.IO.StreamWriter]::new($filePath)
-$stream.Write("@echo off`r`ncd /d %~dp0`r`nwbadmin start backup -backupTarget:H: -include:C: -allCritical -quiet`r`ntakeown /F H:\windowsimagebackup /a /r /d y > nul`r`nicacls H:\windowsimagebackup /reset /T > nul`r`nwmic path softwarelicensingservice get OA3xOriginalProductKey>H:\windowsimagebackup\$hst\ProductKey.txt")
+$stream.Write("@echo off`r`ncd /d %~dp0`r`nwbadmin start backup -backupTarget:H: -include:C: -allCritical -quiet`r`ntakeown /F H:\windowsimagebackup /a /r /d y > nul`r`nicacls H:\windowsimagebackup /reset /T > nul`r`nwinget export -o H:\windowsimagebackup\$hst\MyApps.json`r`nwmic path softwarelicensingservice get OA3xOriginalProductKey>H:\windowsimagebackup\$hst\ProductKey.txt")
 $stream.Close()
 cmd /c "H:\backup.bat" /q
 $backuppath='H:\windowsimagebackup\'+$hst+'\Drivers'

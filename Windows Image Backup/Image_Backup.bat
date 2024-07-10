@@ -30,3 +30,4 @@ wmic path softwarelicensingservice get OA3xOriginalProductKey>%mydrive%\windowsi
 
 md %mydrive%\windowsimagebackup\%HOST%\Drivers
 dism /online /export-driver /destination:%mydrive%\windowsimagebackup\%HOST%\Drivers
+winget export -o %mydrive%\windowsimagebackup\%HOST%\MyApps.json
